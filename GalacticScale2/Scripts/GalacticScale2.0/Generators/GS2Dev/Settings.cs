@@ -117,48 +117,48 @@ namespace GalacticScale.Generators
 
        
 
-        private void LockUI(string key, Val value)
-        {
-            GS2.Warn($"Start {key}");
-            if (UI.ContainsKey(key)) UI[key].Set(value);
-            GS2.Warn("#");
-            if (UI.ContainsKey(key)) UI[key].Disable();
-            GS2.Warn("##");
-        }
+        // private void LockUI(string key, Val value)
+        // {
+        //     GS2.Warn($"Start {key}");
+        //     if (UI.ContainsKey(key)) UI[key].Set(value);
+        //     GS2.Warn("#");
+        //     if (UI.ContainsKey(key)) UI[key].Disable();
+        //     GS2.Warn("##");
+        // }
 
-        private void UnlockUI(string key)
-        {
-            UI[key].Enable();
-        }
+        // private void UnlockUI(string key)
+        // {
+        //     UI[key].Enable();
+        // }
 
-        public void DisableSafeMode()
-        {
-            Log("Disabling SafeMode");
-            // UI["ludicrousMode"].Enable();
-            // UI["minPlanetSize"].Set(new GSSliderConfig(30, 50, 200));
-            // UI["maxPlanetSize"].Set(new GSSliderConfig(50, 500, 500));
-            // UnlockUI("birthPlanetSize");
-            // UnlockUI("birthPlanetSiTi");
-            // UnlockUI("birthPlanetUnlock");
-            // UnlockUI("hugeGasGiants");
-            // UnlockUI("galaxyDensity");
-            // UI["defaultStarCount"].Set(new GSSliderConfig(1, 64, 1024));
-            // UnlockUI("moonsAreSmall");
-            // UnlockUI("secondarySatellites");
-            // UI["minPlanetCount"].Set(new GSSliderConfig(0, 1, 25));
-            // UI["maxPlanetCount"].Set(new GSSliderConfig(1, 10, 25));
-            // for (var i = 0; i < 14; i++)
-            // {
-            //     UnlockUI($"{typeLetter[i]}minPlanetCount");
-            //     UnlockUI($"{typeLetter[i]}maxPlanetCount");
-            //     UnlockUI($"{typeLetter[i]}minPlanetSize");
-            //     UnlockUI($"{typeLetter[i]}maxPlanetSize");
-            //     UnlockUI($"{typeLetter[i]}sizeBias");
-            //     UnlockUI($"{typeLetter[i]}chanceGas");
-            //     UnlockUI($"{typeLetter[i]}chanceMoon");
-            //     UnlockUI($"{typeLetter[i]}systemDensity");
-            // }
-        }
+        // public void DisableSafeMode()
+        // {
+        //     Log("Disabling SafeMode");
+        //     // UI["ludicrousMode"].Enable();
+        //     // UI["minPlanetSize"].Set(new GSSliderConfig(30, 50, 200));
+        //     // UI["maxPlanetSize"].Set(new GSSliderConfig(50, 500, 500));
+        //     // UnlockUI("birthPlanetSize");
+        //     // UnlockUI("birthPlanetSiTi");
+        //     // UnlockUI("birthPlanetUnlock");
+        //     // UnlockUI("hugeGasGiants");
+        //     // UnlockUI("galaxyDensity");
+        //     // UI["defaultStarCount"].Set(new GSSliderConfig(1, 64, 1024));
+        //     // UnlockUI("moonsAreSmall");
+        //     // UnlockUI("secondarySatellites");
+        //     // UI["minPlanetCount"].Set(new GSSliderConfig(0, 1, 25));
+        //     // UI["maxPlanetCount"].Set(new GSSliderConfig(1, 10, 25));
+        //     // for (var i = 0; i < 14; i++)
+        //     // {
+        //     //     UnlockUI($"{typeLetter[i]}minPlanetCount");
+        //     //     UnlockUI($"{typeLetter[i]}maxPlanetCount");
+        //     //     UnlockUI($"{typeLetter[i]}minPlanetSize");
+        //     //     UnlockUI($"{typeLetter[i]}maxPlanetSize");
+        //     //     UnlockUI($"{typeLetter[i]}sizeBias");
+        //     //     UnlockUI($"{typeLetter[i]}chanceGas");
+        //     //     UnlockUI($"{typeLetter[i]}chanceMoon");
+        //     //     UnlockUI($"{typeLetter[i]}systemDensity");
+        //     // }
+        // }
 
         private void DefaultStarCountCallback(Val o)
         {
@@ -206,8 +206,8 @@ namespace GalacticScale.Generators
             preferences.Set("birthPlanetStar", 14);
             preferences.Set("rotationMulti", 1f);
             preferences.Set("innerPlanetDistance", 1f);
-            preferences.Set("safeMode", false);
-            preferences.Set("ludicrousMode", false);
+            // preferences.Set("safeMode", false);
+            // preferences.Set("ludicrousMode", false);
             preferences.Set("allowResonances", true);
             preferences.Set("galaxyDensity", 5);
             preferences.Set("defaultStarCount", 64);
@@ -320,7 +320,7 @@ namespace GalacticScale.Generators
             UI.Add("birthPlanetStar", bOptions.Add(GSUI.Combobox("BirthPlanet Star".Translate(), starTypes, 7, "birthStar",null, "Type of Star to Start at".Translate())));
             Options.Add(GSUI.Group("Birth Planet Settings".Translate(), bOptions, "Settings that only affect the starting planet".Translate()));
             UI.Add("moonsAreSmall", Options.Add(GSUI.Checkbox("Moons Are Small".Translate(), true, "moonsAreSmall", null, "Try to ensure moons are 1/2 their planets size or less".Translate())));
-            UI.Add("moonBias", Options.Add(GSUI.Slider("Gas Giants Moon Bias".Translate(), 0, 50, 100, "moonBias", null, "Lower prefers telluric plants, higher gas giants".Translate())));
+            UI.Add("moonBias", Options.Add(GSUI.Slider("Gas Giants Moon Bias".Translate(), 0, 50, 100, "moonBias", null, "Lower prefers telluric planets, higher gas giants".Translate())));
             UI.Add("hugeGasGiants", Options.Add(GSUI.Checkbox("Huge Gas Giants".Translate(), true, "hugeGasGiants", null,"Allow gas giants larger than 800 radius".Translate())));
             UI.Add("tidalLockInnerPlanets",
                 Options.Add(GSUI.Checkbox("Tidal Lock Inner Planets".Translate(), false, "tidalLockInnerPlanets")));
@@ -375,7 +375,7 @@ namespace GalacticScale.Generators
 
             UI.Add($"orbitOverride", Options.Add(GSUI.Checkbox("Override Orbits".Translate(), false, $"orbitOverride", orbitOverrideCallback, "Enable the slider below".Translate())));
             UI.Add($"orbits", Options.Add(GSUI.RangeSlider($"Orbit Range".Translate(), 0.02f, 0.1f, 30, 99, 0.01f, $"orbits", null, orbitLowCallback, orbitHighCallback, "Force the distances planets can spawn between".Translate())));
-            UI.Add($"inclination", Options.Add(GSUI.Slider("Max Inclination".Translate(), -1, -1, 90, 1f, $"inclination", /*typeCallbacks[$"{typeLetter[i]}inclination"]*/inclinationCallback, "Maximum angle of orbit".Translate(), true)));
+            UI.Add($"inclination", Options.Add(GSUI.Slider("Max Inclination".Translate(), -1, -1, 180, 1f, $"inclination", /*typeCallbacks[$"{typeLetter[i]}inclination"]*/inclinationCallback, "Maximum angle of orbit".Translate(), true)));
 
             // UI.Add("systemDensity", Options.Add(GSUI.Slider("System Density".Translate(), 1, 3, 5, "systemDensity", SystemDensityCallback)));
             Options.Add(GSUI.Separator());
@@ -393,7 +393,7 @@ namespace GalacticScale.Generators
                 UI.Add($"{typeLetter[i]}chanceMoon", tOptions.Add(GSUI.Slider($"Chance for Moon".Translate(), 0, 20, 99, $"{typeLetter[i]}chanceMoon")));
                 UI.Add($"{typeLetter[i]}orbitOverride", tOptions.Add(GSUI.Checkbox("Override Orbits".Translate(), false, $"{typeLetter[i]}orbitOverride", null, "Enable the slider below".Translate())));
                 UI.Add($"{typeLetter[i]}orbits", tOptions.Add(GSUI.RangeSlider($"Orbit Range".Translate(), 0.02f, 0.1f, 30, 99, 0.01f, $"{typeLetter[i]}orbits", null, null, null, "Force the distances planets can spawn between".Translate())));
-                UI.Add($"{typeLetter[i]}inclination", tOptions.Add(GSUI.Slider("Max Inclination".Translate(), -1, -1, 90, 1f, $"{typeLetter[i]}inclination", /*typeCallbacks[$"{typeLetter[i]}inclination"]*/null, "Maximum angle of orbit".Translate(), true)));
+                UI.Add($"{typeLetter[i]}inclination", tOptions.Add(GSUI.Slider("Max Inclination".Translate(), -1, -1, 180, 1f, $"{typeLetter[i]}inclination", /*typeCallbacks[$"{typeLetter[i]}inclination"]*/null, "Maximum angle of orbit".Translate(), true)));
                 //UI[$"{typeLetter[i]}inclination"].Set(new GSSliderConfig(-1, -1, 90, true));
           
                 // UI.Add($"{typeLetter[i]}systemDensity", tOptions.Add(GSUI.Slider($"{typeDesc[i]} Density".Translate(), 1, 3, 5, $"{typeLetter[i]}systemDensity", null, "Lower is less dense".Translate())));
@@ -405,46 +405,46 @@ namespace GalacticScale.Generators
         }
         private void orbitLowCallback(Val o)
         {
-            Warn(o);
+            // Warn(o);
 
             SetAllStarTypeRSMin("orbits", o);
         }
         private void orbitHighCallback(Val o)
         {
-            GS2.Warn(o);
+            // GS2.Warn(o);
             SetAllStarTypeRSMax("orbits", o);
         }
         private void hzLowCallback(Val o)
         {
-            Warn(o);
+            // Warn(o);
 
             SetAllStarTypeRSMin("hz", o);
         }
         private void hzHighCallback(Val o)
         {
-            GS2.Warn(o);
+            // GS2.Warn(o);
             SetAllStarTypeRSMax("hz", o);
         }
         private void planetCountLow(Val o)
         {
-            Warn(o);
+            // Warn(o);
 
             SetAllStarTypeRSMin("planetCount", o);
         }
         private void planetCountHigh(Val o)
         {
-            GS2.Warn(o);
+            // GS2.Warn(o);
             SetAllStarTypeRSMax("planetCount", o);
         }
         private void planetSizeLow(Val o)
         {
-            Warn(o);
+            // Warn(o);
             
             SetAllStarTypeRSMin("planetSize", Utils.ParsePlanetSize(o));
         }    
         private void planetSizeHigh(Val o)
         {
-            GS2.Warn(o);
+            // GS2.Warn(o);
             SetAllStarTypeRSMax("planetSize", Utils.ParsePlanetSize(o));
         }
 
@@ -476,7 +476,7 @@ namespace GalacticScale.Generators
 
         private void GasChanceCallback(Val o)
         {
-            GS2.Warn("Setting Gas Chance"+ o.String());
+            // GS2.Warn("Setting Gas Chance"+ o.String());
             SetAllStarTypeOptions("chanceGas", o);
         }
 

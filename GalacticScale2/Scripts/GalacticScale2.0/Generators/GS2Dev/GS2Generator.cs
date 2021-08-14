@@ -39,7 +39,7 @@ namespace GalacticScale.Generators
             if (forcedBirthStar != null)
             {
                 this.forcedBirthStar = forcedBirthStar.name;
-                GS2.Warn("Forcing BirthStar to "+this.forcedBirthStar);
+                // GS2.Warn("Forcing BirthStar to "+this.forcedBirthStar);
             }
             var highStopwatch = new HighStopwatch();
             highStopwatch.Begin();
@@ -165,11 +165,11 @@ namespace GalacticScale.Generators
                         Themes.AshenGelisol.Process();
                         if (!GSSettings.ThemeLibrary.ContainsKey("AshenGelisol"))
                         {
-                            Warn("Nope" + GS2.ThemeLibrary.Count);
+                            // Warn("Nope" + GS2.ThemeLibrary.Count);
                             GSSettings.ThemeLibrary.Add("AshenGelisol", Themes.AshenGelisol);
                             Themes.AshenGelisol.Process();
                         }
-                        GS2.Warn($"Ashen Gelisol:{GSSettings.ThemeLibrary.ContainsKey("AshenGelisol")}");
+                        // GS2.Warn($"Ashen Gelisol:{GSSettings.ThemeLibrary.ContainsKey("AshenGelisol")}");
                     // }
                     var tiPlanet = birthPlanet.Moons.Add(new GSPlanet("Titania McGrath", "AshenGelisol",
                         GetStarPlanetSize(birthStar), 0.03f, 66f, 900f, 0f,
@@ -389,9 +389,11 @@ namespace GalacticScale.Generators
 
         private void AddSiTiToBirthPlanet()
         {
-            Warn("Setting SI/TI");
+            // Warn("Setting SI/TI");
+            birthPlanet.veinSettings = birthPlanet.GsTheme.VeinSettings.Clone();
             birthPlanet.veinSettings.Algorithm = "GS2";
             birthPlanet.GsTheme.CustomGeneration = true;
+            // Warn("2");
             birthPlanet.veinSettings.VeinTypes.Add(GSVeinType.Generate(
                 EVeinType.Silicium,
                 1, 10, 0.6f, 0.6f, 5, 10, false));
