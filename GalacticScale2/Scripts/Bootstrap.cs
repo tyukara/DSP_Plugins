@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.IO;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
@@ -7,23 +9,33 @@ using UnityEngine;
 
 namespace GalacticScale
 {
-    [BepInPlugin("dsp.galactic-scale.2", "Galactic Scale 2 Plug-In", "2.0.87.1")]
+    
+    public partial class GS2
+    {
+        public static int PreferencesVersion = 2104;
+    }
+    
+    
+    [BepInPlugin("dsp.galactic-scale.2", "Galactic Scale 2 Plug-In", VERSION)]
     [BepInDependency("space.customizing.console", BepInDependency.DependencyFlags.SoftDependency)]
+    // [BepInDependency("nebula.api", BepInDependency.DependencyFlags.HardDependency)]
     public class Bootstrap : BaseUnityPlugin
     {
-        public new static ManualLogSource Logger;
+        public const string VERSION = "2.1.8.0";
 
+        public new static ManualLogSource Logger;
+        
         // Internal Variables
         public static Queue buffer = new Queue();
         public static PlanetData TeleportPlanet;
         public static StarData TeleportStar;
         public static bool TeleportEnabled;
         public static int timer;
-
+        
         internal void Awake()
         {
             var v = Assembly.GetExecutingAssembly().GetName().Version;
-            GS2.Version = $"2.0b{v.Build}.{v.Revision}";
+            GS2.Version = $"2.1b{v.Build}.{v.Revision}";
             BCE.Console.Init();
             var _ = new Harmony("dsp.galactic-scale.2");
             Logger = new ManualLogSource("GS2");
@@ -155,5 +167,7 @@ namespace GalacticScale
             GameMain.mainPlayer.transform.localScale = Vector3.one;
             GameCamera.instance.FrameLogic();
         }
+
+
     }
 }

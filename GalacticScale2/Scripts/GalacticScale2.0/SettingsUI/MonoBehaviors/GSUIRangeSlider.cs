@@ -62,7 +62,7 @@ namespace GalacticScale
             float highValue = (int)(HighValue * 100) / 100f;
             _lowValueText.text = lowValue.ToString();
             _highValueText.text = highValue.ToString();
-            OnChange?.Invoke((lowValue,highValue));
+            OnChange?.Invoke(new FloatPair(lowValue,highValue));
             if (OnLowChange != null) OnLowChange?.Invoke(lowValue);
             if (OnHighChange != null) OnHighChange?.Invoke(highValue);
         }

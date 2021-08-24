@@ -5,6 +5,7 @@ namespace GalacticScale
 {
     public class GSStar
     {
+        public readonly ValStore genData = new ValStore();
         private float _acdiscRadius = -1;
         private float _age = -1;
         private float _classfactor = 3;
@@ -20,8 +21,8 @@ namespace GalacticScale
         private float _radius = -1;
         private float _resourceCoef = -1f;
         private float _temperature = -1;
-
         [NonSerialized] public int assignedIndex = 0;
+        [SerializeField] public string BinaryCompanion = null;
 
         [NonSerialized] public int counter = 0;
 
@@ -39,7 +40,7 @@ namespace GalacticScale
         public int Seed;
         public ESpectrType Spectr;
         public EStarType Type;
-        public readonly ValStore genData = new ValStore();
+
         public GSStar(int seed, string name, ESpectrType spectr, EStarType type, GSPlanets planets)
         {
             Name = name;
@@ -198,12 +199,18 @@ namespace GalacticScale
         [SerializeField]
         public VectorLF3 position
         {
-            get => _pos == new VectorLF3() && assignedIndex != 0 ? InitPos() : _pos;
+            get
+            {
+                if (_pos == new VectorLF3() && assignedIndex != 0) return InitPos();
+                return _pos;
+            }
             set => _pos = value;
         }
 
         public double magnitude => position.magnitude;
-        public float RadiusAU => radius / 50;
+        public float RadiusM => radius * 800f;
+        public float RadiusAU => RadiusM / 40000f;
+        public float RadiusLY => RadiusAU / 60f;
 
         public override string ToString()
         {
@@ -301,7 +308,7 @@ namespace GalacticScale
 
         private float InitResourceCoef()
         {
-            var num1 = (float) position.magnitude / 32f;
+            var num1 = (float)position.magnitude / 32f;
             if (num1 > 1.0) num1 = Mathf.Log(Mathf.Log(Mathf.Log(Mathf.Log(Mathf.Log(num1) + 1f) + 1f) + 1f) + 1f) + 1f;
 
             _resourceCoef = Mathf.Pow(7f, num1) * 0.6f;
@@ -317,9 +324,35 @@ namespace GalacticScale
         public GSStar Clone()
         {
             GSStar clone;
-            clone = (GSStar) MemberwiseClone();
+            clone = (GSStar)MemberwiseClone();
             clone.Planets = new GSPlanets(Planets);
             return clone;
+        }
+
+        public string displayType
+        {
+            get
+            {
+                if (Type == EStarType.BlackHole) return "Black Hole";
+                if (Type == EStarType.WhiteDwarf) return "White Dwarf";
+                if (Type == EStarType.NeutronStar) return "Neutron Star";
+                if (Type == EStarType.GiantStar)
+                {
+                    if (Spectr == ESpectrType.F || Spectr == ESpectrType.G) return "Yellow Giant";
+                    if (Spectr == ESpectrType.A) return "White Giant";
+                    if (Spectr == ESpectrType.B || Spectr == ESpectrType.O) return "Blue Giant";
+                    return "Red Giant";
+                }
+
+                if (Spectr == ESpectrType.A) return "Type A Star";
+                if (Spectr == ESpectrType.B) return "Type B Star";
+                if (Spectr == ESpectrType.F) return "Type F Star";
+                if (Spectr == ESpectrType.G) return "Type G Star";
+                if (Spectr == ESpectrType.M) return "Type M Star";
+                if (Spectr == ESpectrType.K) return "Type K Star";
+                if (Spectr == ESpectrType.O) return "Type O Star";
+                return "Unknown Star";
+            }
         }
         //public float SystemRadius => Planets[Planets.Count -1].SystemRadius;
     }

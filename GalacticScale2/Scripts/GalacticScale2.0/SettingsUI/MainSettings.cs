@@ -20,9 +20,10 @@ namespace GalacticScale
         public bool ForceRare => Preferences.GetBool("Force Rare Spawn");
         public bool DebugMode => Preferences.GetBool("Debug Log");
         public bool Dev => Preferences.GetBool("Dev");
-        public bool SkipPrologue => Preferences.GetBool("Skip Prologue");
+        public bool SkipPrologue => Preferences.GetBool("Skip Prologue", true);
         public bool SkipTutorials => Preferences.GetBool("Skip Tutorials");
         public bool CheatMode => Preferences.GetBool("Cheat Mode");
+        // public bool VanillaGrid => Preferences.GetBool("Vanilla Grid");
         public bool MinifyJson
         {
             get
@@ -88,9 +89,9 @@ namespace GalacticScale
             _generatorsCombobox = Options.Add(GSUI.Combobox("Generator".Translate(), _generatorNames, 0, "Generator",
                 GeneratorCallback, "Try them all!".Translate()));
             RefreshFileNames();
-            Options.Add(GSUI.Checkbox("Skip Prologue".Translate(), false, "Skip Prologue"));
+            Options.Add(GSUI.Checkbox("Skip Prologue".Translate(), true, "Skip Prologue"));
             Options.Add(GSUI.Checkbox("Skip Tutorials".Translate(), false, "Skip Tutorials"));
-            
+            // Options.Add(GSUI.Checkbox("Vanilla Grid (200r)".Translate(), false, "Vanilla Grid", VanillaGridCheckboxCallback, "Use the vanilla grid for 200 size planets".Translate()));
             
 
             var DebugOptions = new GSOptions();
@@ -99,6 +100,7 @@ namespace GalacticScale
             _cheatModeCheckbox = DebugOptions.Add(GSUI.Checkbox("Cheat Mode".Translate(), false, "Cheat Mode", null, "All Research, TP by ctrl-click nav arrow".Translate()));
             DebugOptions.Add(GSUI.Slider("Ship Speed Multiplier".Translate(), 1f, 1f, 100f, "Logistics Ship Multi", null, "Multiplier for Warp Speed of Ships".Translate()));
             Options.Add(GSUI.Group("Debug Options".Translate(), DebugOptions, "Useful for testing galaxies/themes".Translate()));
+            Options.Add(GSUI.Spacer());
             var JsonOptions = new GSOptions();
             JsonOptions.Add(GSUI.Input("Export Filename".Translate(), "My First Custom Galaxy", "Export Filename", null, "Excluding .json".Translate()));
             JsonOptions.Add(GSUI.Checkbox("Minify Exported JSON".Translate(), false, "Minify JSON", null, "Only save changes".Translate()));
@@ -110,6 +112,16 @@ namespace GalacticScale
 
             Options.Add(GSUI.Group("Custom Galaxy Export/Import".Translate(), JsonOptions, "Export available once in game".Translate()));
         }
+
+        // private void VanillaGridCheckboxCallback(Val o)
+        // {
+        //     if (GameMain.isPaused) return;
+        //     if (GS2.keyedLUTs.ContainsKey(200)) GS2.keyedLUTs.Remove(200);
+        //     if (PatchOnUIBuildingGrid.LUT512.ContainsKey(200))
+        //     {
+        //         PatchOnUIBuildingGrid.LUT512.Remove(200);
+        //     }
+        // }
 
         public void SetResourceMultiplier(float val)
         {
@@ -211,7 +223,7 @@ namespace GalacticScale
                     externalThemesGroupOptions.Add(FolderGroup);
                 }
             }
-
+            Options.Add(GSUI.Spacer());
             var externalThemesGroup = Options.Add(GSUI.Group("External Themes".Translate(), externalThemesGroupOptions));
         }
         private void ExportAllThemes(Val o)

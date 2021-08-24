@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
-using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -97,7 +95,7 @@ namespace GalacticScale
                     case "Input":
                         return Data.ToString();
                     case "Combobox":
-                        GS2.Warn($"Combo {Label} {Data}");
+                        // GS2.Warn($"Combo {Label} {Data}");
                         // var cbresult = GetInt(Data);
                         // if (cbresult.succeeded) return cbresult.value;
                         if (comboDefault >= 0) return comboDefault;
@@ -285,10 +283,10 @@ namespace GalacticScale
 
                 case "RangeSlider":
                     // GS2.Warn($"Trying to valuetuple {o} for {Label}");
-                    (float, float) ff = o;
-                    RectTransform.GetComponent<GSUIRangeSlider>().LowValue = ff.Item1;
-                    RectTransform.GetComponent<GSUIRangeSlider>().HighValue = ff.Item2;
-                    RectTransform.GetComponent<GSUIRangeSlider>().LowValue = ff.Item1;
+                    FloatPair ff = o;
+                    RectTransform.GetComponent<GSUIRangeSlider>().LowValue = ff.low;
+                    RectTransform.GetComponent<GSUIRangeSlider>().HighValue = ff.high;
+                    RectTransform.GetComponent<GSUIRangeSlider>().LowValue = ff.low;
                     // GS2.Warn($"{RectTransform.GetComponent<GSUIRangeSlider>().LowValue} {RectTransform.GetComponent<GSUIRangeSlider>().HighValue}");
                     return true;
                 case "Slider":
@@ -548,9 +546,11 @@ namespace GalacticScale
         {
             return o =>
             {
-                if (o.ToString().Split('(', ',', ')').Length > 2)
+                // GS2.Warn("*");
+
+                if (o.ToString().Split(':').Length > 1)
                 {
-                    (float low, float high) val = o;
+                    FloatPair val = o;
                     val.low = val.low - val.low % increment;
                     val.high = val.high - val.high % increment;
                     if (val.high > ((GSRangeSliderConfig)instance.Data).maxValue) val.high = ((GSRangeSliderConfig)instance.Data).maxValue;
@@ -591,6 +591,8 @@ namespace GalacticScale
         {
             return o =>
             {
+                // GS2.Warn("*");
+
                 var value = 200;
                 if (!int.TryParse(o.ToString(), out value))
                 {
@@ -608,11 +610,12 @@ namespace GalacticScale
         {
             return o =>
             {
+                // GS2.Warn("*");
                 var value = o.FloatFloat();
-                float parsedLow = Utils.ParsePlanetSize(value.Item1);
-                float parsedHigh = Utils.ParsePlanetSize(value.Item2);
-                instance.Set((parsedLow,parsedHigh));
-                existingCallback((parsedLow,parsedHigh));
+                float parsedLow = Utils.ParsePlanetSize(value.low);
+                float parsedHigh = Utils.ParsePlanetSize(value.high);
+                instance.Set(new FloatPair(parsedLow,parsedHigh));
+                existingCallback(new FloatPair(parsedLow,parsedHigh));
                 
                 
             };
@@ -676,7 +679,15 @@ namespace GalacticScale
             }
 
             var p = Generator.Export();
-            p.Set(key, value);
+            try
+            {
+                p.Set(key, value);
+            }
+            catch (Exception e)
+            {
+                GS2.Warn($"Error:{Label}");
+                GS2.Warn(e.Message);
+            }
             Generator.Import(p);
         }
 
@@ -731,7 +742,7 @@ public class GSUIGroupConfig
         public float maxValue;
         public float defaultLowValue;
         public float defaultHighValue;
-        public ValueTuple<float, float> defaultValue { get => (defaultLowValue, defaultHighValue); }
+        public FloatPair defaultValue { get => new FloatPair(defaultLowValue, defaultHighValue); }
         public GSRangeSliderConfig(float minValue, float lowValue, float highValue, float maxValue, GSOptionCallback callbackLow = null, GSOptionCallback callbackHigh = null)
         {
             this.minValue = minValue;

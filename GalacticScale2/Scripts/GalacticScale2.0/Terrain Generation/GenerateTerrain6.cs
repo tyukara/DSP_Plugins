@@ -8,8 +8,8 @@ namespace GalacticScale
         public static void GenerateTerrain6(GSPlanet gsPlanet, double modX = 0.0, double modY = 0.0)
         {
             random = new GS2.Random(gsPlanet.Seed);
-            GS2.Log($"USING GSTA6 FOR {gsPlanet.Name} with seed {GSSettings.Seed}");
-            var t = GS2.ThemeLibrary[gsPlanet.Theme].TerrainSettings;
+            // GS2.Log($"USING GSTA6 FOR {gsPlanet.Name} with seed {GSSettings.Seed}");
+            var t = gsPlanet.GsTheme.TerrainSettings;
             //GS2.Log("Generate Terrain for "+gsPlanet.Name + " " + t.landModifier );
             var xPrecision = t.xFactor;
             var yPrecision = t.yFactor;
