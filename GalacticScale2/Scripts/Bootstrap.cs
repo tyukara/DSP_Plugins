@@ -21,7 +21,7 @@ namespace GalacticScale
     // [BepInDependency("nebula.api", BepInDependency.DependencyFlags.HardDependency)]
     public class Bootstrap : BaseUnityPlugin
     {
-        public const string VERSION = "2.1.8.0";
+        public const string VERSION = "2.1.9.0";
 
         public new static ManualLogSource Logger;
         
@@ -95,6 +95,20 @@ namespace GalacticScale
 
         private void FixedUpdate()
         {
+            if (GS2.Config.Dev && VFInput.control && VFInput.shift && VFInput._rotate)
+            {
+                if (!GameMain.isPaused && !DSPGame.IsMenuDemo)
+                {
+                    
+                    GameMain.Pause();
+                    UIRoot.instance.uiGame.escMenu._Open();
+                }
+
+                UIRoot.instance.OpenOptionWindow();
+                GS2.Config.LoadJsonGalaxy("Pasta");
+               
+            }
+
             timer++;
             if (timer >= 1000)
                 timer = 0;

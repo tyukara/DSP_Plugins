@@ -181,7 +181,8 @@ namespace GalacticScale.Generators
                 if (IsPlanetOfStar(star, body) && starInc > -1)
                 {
                     // GS2.Warn($"SETTING starInc Orbit Inclination of {star.Name} to {starInc}");
-                    body.OrbitInclination = random.NextFloat(starInc);
+                    if (starInc > 0) body.OrbitInclination = random.NextFloat(starInc);
+                    else body.OrbitInclination = 0;
                 }
                 body.RotationPeriod = preferences.GetFloat("rotationMulti", 1f) * random.Next(60, 3600);
                 if (random.NextDouble() < 0.02) body.OrbitalPeriod = -1 * body.OrbitalPeriod; // Clockwise Rotation
@@ -259,7 +260,8 @@ namespace GalacticScale.Generators
                 {
                     GS2.Warn("Setting Theme for BirthPlanet");
                     var habitableTheme = GSSettings.ThemeLibrary.Query(random, EThemeType.Telluric, EThemeHeat.Temperate, preferences.GetInt("birthPlanetSize", 200), EThemeDistribute.Default, true);
-                    planet.Theme = habitableTheme;
+                    if (preferences.GetBool("birthPlanetUnlock", false)) planet.Theme = habitableTheme;
+                    else planet.Theme = "Mediterranean";
                     planet.Scale = 1f;
                     continue;
                 }
