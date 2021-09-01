@@ -126,7 +126,6 @@ namespace GalacticScale
 
         public static iConfigurableGenerator GetConfigurableGeneratorInstance(Type t)
         {
-            //GS2.Warn("Getting iconfig instance");
             if (GS2.Config.GetType() == t) return GS2.Config;
             foreach (var g in GS2.Generators)
                 if (g.GetType() == t)
@@ -135,9 +134,16 @@ namespace GalacticScale
                         return g as iConfigurableGenerator;
                     GS2.Warn($"Generator {t} is not configurable");
                 }
-
-            //if (t.GetType() != typeof(SettingsUI)) GS2.Warn($"Could not find generator of type '{t}'");
-            //GS2.Warn("returning null");
+            return null;
+        }        
+        public static iConfigurablePlugin GetConfigurablePluginInstance(Type t)
+        {
+            foreach (var g in GS2.Plugins)
+                if (g.GetType() == t)
+                {
+                    if (g is iConfigurablePlugin)
+                        return g as iConfigurablePlugin;
+                }
             return null;
         }
 
@@ -319,12 +325,13 @@ namespace GalacticScale
             if (sa.Length > 50)
             {
                 output = "";
+
+                output = "Luminosity: " + Math.Round(Math.Pow(star.luminosity, 0.33), 2);
                 if (gsStar.BinaryCompanion != null)
                 {
                     var binary = GS2.GetGSStar(gsStar.BinaryCompanion);
                     if ( binary != null) output += $"Binary Star ({binary.Type})\r\n";
                 }
-                output = "Luminosity: " + Math.Round(Math.Pow(star.luminosity, 0.33), 2);
                 var sa1 = new string[50];
                 var sa2 = new string[sa.Length -50];
                 for (int i = 0; i < 50; i++)
@@ -333,15 +340,15 @@ namespace GalacticScale
                     // GS2.Warn(i + " " + (j) + " "+sa.Length);
                     if (sa.Length > (j))
                     {
-                        GS2.Log(i.ToString() + " " + j.ToString());
+                        // GS2.Log(i.ToString() + " " + j.ToString());
                         var a = string.Format("{0,30}", sa[i]);
-                        var b = string.Format("{0,30}", sa[j]);
-                        output += $"\r\n{a} | {b}";
+                        var b = string.Format("{0,-30}", sa[j]);
+                        output += $"\r\n{a}  {b}";
                             
                     }
                     else
                     {
-                        GS2.Warn(i.ToString());
+                        // GS2.Warn(i.ToString());
                         output += $"\r\n{string.Format("{0,30}", sa[i])}";
                     }
                 }

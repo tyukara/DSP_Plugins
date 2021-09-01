@@ -134,7 +134,7 @@ namespace GalacticScale.Generators
                 randomMoon.Moons.Add(mm);
                 mm.genData.Add("hosttype", "moon");
                 mm.genData.Add("hostname", randomMoon.Name);
-                // GS2.Log($"Added {mm} to {randomMoon}");
+                // GS2.Log($"Added {mm} {mm.Radius} to {randomMoon.Name}");
             }
 
 
@@ -199,7 +199,7 @@ namespace GalacticScale.Generators
                     // GS2.Warn("Setting Crazy Inclination for " + star.Name);
                     body.OrbitInclination = random.NextFloat(20f, 85f);
                 }
-                body.rareChance = preferences.GetFloat($"{GetTypeLetterFromStar(star)}rareChance", 0f);
+                body.rareChance = preferences.GetFloat($"{GetTypeLetterFromStar(star)}rareChance", 0f)/100f;
                 
                 // Force inclinations for testing
                 // body.OrbitInclination = 0f;

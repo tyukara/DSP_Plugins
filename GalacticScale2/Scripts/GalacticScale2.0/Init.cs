@@ -106,11 +106,15 @@ namespace GalacticScale
             LoadPreferences(true);
             var themes = ThemeLibrary.Select(t => t.Value).ToList();
             foreach (var t in themes) t.Process();
-            LoadPlugins();
+            LoadGenerators();
             LoadPreferences();
             Log("End");
         }
 
+        public static void ShowMessage(string message, string title = "Galactic Scale", string button = "OK")
+        {
+            UIMessageBox.Show(title.Translate(), message.Translate(), button.Translate(), 0);
+        }
         public static void OnMenuLoaded()
         {
             if (MenuHasLoaded) return;

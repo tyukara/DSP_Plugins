@@ -4,6 +4,7 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using NebulaAPI;
+using UnityEngine.PostProcessing;
 
 namespace GalacticScale
 {
@@ -26,18 +27,25 @@ namespace GalacticScale
             
         }
 
-        public string Verson => Bootstrap.VERSION;
-        public bool CheckVersion => true;
+        public string Version => Bootstrap.VERSION;
+
+        bool IMultiplayerMod.CheckVersion(string hostVersion, string clientVersion)
+        {
+            return hostVersion.Equals(clientVersion);
+        }
 
         public void Export(BinaryWriter w)
         {
-            GS2.Export(w);
+            var settings = GSSettings.Serialize();
+            w.Write(settings);
         }
 
         public void Import(BinaryReader r)
         {
-            GS2.Import(r);
+            var settings = r.ReadString();
+            GSSettings.DeSerialize(settings);
         }
+        
     }
 
     public static class NebulaCompatPatch
@@ -46,7 +54,7 @@ namespace GalacticScale
         [HarmonyPatch(typeof(GameData), "SetForNewGame")]
         public static void NebulaCheck()
         {
-            if (NebulaModAPI.GetSimulatedWorld().Initialized && !NebulaModAPI.GetLocalPlayer().IsMasterClient) GS2.NebulaClient = true;
+            if (NebulaModAPI.IsMultiplayerActive && NebulaModAPI.MultiplayerSession.LocalPlayer.IsClient) GS2.NebulaClient = true;
             else GS2.NebulaClient = false;
         }
     }
