@@ -114,7 +114,14 @@ namespace GalacticScale
 
         private static void CreateOptionsUI()
         {
-            Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(Assembly.GetAssembly(typeof(GS2)).Location), "GSUI.dll"));
+            var gsuipath = Path.Combine(Path.GetDirectoryName(Assembly.GetAssembly(typeof(GS2)).Location), "GSUI.dll");
+            if (!File.Exists(gsuipath))
+            {
+                ShowMessage("Missing GSUI.DLL".Translate(), "Error".Translate(), "Ok".Translate());
+                return;
+            }
+
+            Assembly.LoadFrom(gsuipath);
             var gsp = Bundle.LoadAsset<GameObject>("assets/gssettingspanel.prefab");
             GSSettingsPanel = Object.Instantiate(gsp, details, false).GetComponent<RectTransform>();
             GSSettingsPanel.GetComponent<ScrollRect>().scrollSensitivity = 10;
@@ -130,18 +137,17 @@ namespace GalacticScale
                 var plugin = Plugins[i];
                 var group = GSUI.Group(plugin.Name, plugin.Options, plugin.Description, true, true, o =>
                 {
-                    plugin.Enabled = !plugin.Enabled;
-                    Warn(plugin.Enabled.ToString());
+                    plugin.Enabled = o;
+                    // var x = plugin.Export();
+                    //Warn(plugin.Enabled.ToString());
                 });
                 UnityAction postfix = () =>
                 {
-                    Warn($"Setting {plugin.Enabled}");
+                    //Warn($"Setting {plugin.Enabled}");
                     group.Set(plugin.Enabled);
                     plugin.Enabled = plugin.Enabled;
                 };
                 OptionsUIPostfix.AddListener(postfix);
-
-
                 options.Add(GSUI.Spacer());
                 options.Add(group);
                 options.Add(GSUI.Spacer());

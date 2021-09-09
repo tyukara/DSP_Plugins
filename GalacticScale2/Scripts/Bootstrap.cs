@@ -20,7 +20,7 @@ namespace GalacticScale
     // [BepInDependency("nebula.api", BepInDependency.DependencyFlags.HardDependency)]
     public class Bootstrap : BaseUnityPlugin
     {
-        public const string VERSION = "2.1.15.0";
+        public const string VERSION = "2.2.0.0";
 
         public new static ManualLogSource Logger;
 
@@ -34,7 +34,7 @@ namespace GalacticScale
         internal void Awake()
         {
             var v = Assembly.GetExecutingAssembly().GetName().Version;
-            GS2.Version = $"2.1b{v.Build}.{v.Revision}";
+            GS2.Version = $"{v.Major}.{v.Minor}.{v.Build}.{v.Revision}";
             BCE.Console.Init();
             var _ = new Harmony("dsp.galactic-scale.2");
             Logger = new ManualLogSource("GS2");
@@ -96,14 +96,12 @@ namespace GalacticScale
 
         private void FixedUpdate()
         {
-            // if (VFInput.alt)
-            // {
-            //     if (GameMain.localPlanet != null && GameMain.mainPlayer != null) GS2.Warn((GameMain.localPlanet.uPosition - GameMain.mainPlayer.uPosition).magnitude + " distance");
-            // }
-            if (VFInput.control && VFInput.alt && VFInput.shift && VFInput._moveRight)
+            if (VFInput.alt && VFInput.control && VFInput._openMechLight)
             {
-                GS2.Config.EnableDevMode();
+                GS2.WarnJson(HandleLocalStarPlanets.TransitionRadii);
             }
+            if (VFInput.control && VFInput.alt && VFInput.shift && VFInput._moveRight) GS2.Config.EnableDevMode();
+
             if (GS2.Config.Dev && VFInput.control && VFInput.shift && VFInput._rotate && GameMain.localPlanet != null)
             {
                 var filename = Path.Combine(GS2.DataDir, "WorkingTheme.json");
@@ -117,6 +115,7 @@ namespace GalacticScale
                     GS2.ShowMessage("WorkingTheme.json has been exported. Use the same key combination to reload it");
                     return;
                 }
+
                 GameMain.mainPlayer.controller.movementStateInFrame = EMovementState.Sail;
                 GameMain.mainPlayer.controller.actionSail.ResetSailState();
                 GameCamera.instance.SyncForSailMode();

@@ -25,14 +25,19 @@ namespace GalacticScale
             var json = r.ReadString();
             var result = GSSettings.Instance;
             fsData data2;
-                var parseResult = fsJsonParser.Parse(json, out data2);
-            
+            var parseResult = fsJsonParser.Parse(json, out data2);
+
             if (parseResult.Failed)
             {
                 Warn("Parse Failed");
                 r.BaseStream.Position = position;
                 ActiveGenerator = GetGeneratorByID("space.customizing.generators.vanilla");
                 return false;
+            }
+
+            if (Config.Dev)
+            {
+                File.WriteAllText(Path.Combine(GS2.DataDir, "SaveContents.json"),json);
             }
             var deserialize = serializer.TryDeserialize(data2, ref result);
             if (deserialize.Failed)
@@ -42,6 +47,7 @@ namespace GalacticScale
                 ActiveGenerator = GetGeneratorByID("space.customizing.generators.vanilla");
                 return false;
             }
+
             if (version != GSSettings.Instance.version)
             {
                 Warn("Version mismatch: " + GSSettings.Instance.version + " trying to load " + version + " savedata");
@@ -49,6 +55,7 @@ namespace GalacticScale
                 ActiveGenerator = GetGeneratorByID("space.customizing.generators.vanilla");
                 return false;
             }
+
             if (Vanilla) ActiveGenerator = GetGeneratorByID("space.customizing.generators.gs2dev");
             GSSettings.Instance = result;
             GSSettings.Instance.imported = true;

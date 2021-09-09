@@ -28,7 +28,7 @@ namespace GalacticScale
 
         [NonSerialized] public Cubemap ReflectionMap;
 
-        public Color Reflections = new Color();
+        public Color Reflections;
         public string ResourcePath;
         public Color WaterColor1 = Color.black;
         public Color WaterColor2 = Color.black;
@@ -38,10 +38,8 @@ namespace GalacticScale
         {
             //GS2.Log("Start " + (theme.ambientDesc == null));
             if (theme.ambientDesc == null)
-            {
-                GS2.Warn(theme.Name + " has no AmbientDesc");
+                //GS2.Warn(theme.Name + " has no AmbientDesc");
                 return;
-            }
 
             Color1 = theme.ambientDesc.ambientColor0; //Trees Day Tint
             Color2 = theme.ambientDesc.ambientColor1; //Trees Twilight Tint
@@ -87,8 +85,8 @@ namespace GalacticScale
             } //////////// FIX RARE SPAWNING IN THEME
             else
             {
-                //GS2.Log(CubeMap);
-                //GS2.Log(Reflections.ToString());
+                GS2.Log(CubeMap);
+                GS2.Log(Reflections.ToString());
                 //Should move this out of here
                 //AssetBundle bundle = GS2.bundle;
                 //if (bundle == null) bundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetAssembly(typeof(GS2)).Location), "galacticbundle"));
@@ -96,10 +94,14 @@ namespace GalacticScale
                 {
                     var x = GS2.Bundle.LoadAsset<Cubemap>("cube2");
                     if (Reflections.a != 0)
+                    {
                         ReflectionMap = Utils.TintCubeMap(x, Reflections);
-                    //GS2.Log("Set Reflection Map to Tinted One");
+                        GS2.Log("Set Reflection Map to Tinted One");
+                    }
                     else
+                    {
                         ReflectionMap = x;
+                    }
                 }
             }
 
@@ -130,12 +132,11 @@ namespace GalacticScale
                 theme.ambientDesc.reflectionMap = ReflectionMap;
             if (LutTexture != null) theme.ambientDesc.lutTexture = LutTexture;
             // GS2.Log($"Ambient Took {highStopwatch.duration:F5}s");
-
         }
 
         public GSAmbientSettings Clone()
         {
-            var a = (GSAmbientSettings) MemberwiseClone();
+            var a = (GSAmbientSettings)MemberwiseClone();
             if (ReflectionMap != null && ReflectionMap.name.Split('_')[0] != "def")
                 a.ReflectionMap = Object.Instantiate(ReflectionMap);
 
@@ -149,10 +150,7 @@ namespace GalacticScale
 
         public override string ToString()
         {
-            return "->" + Color1 + Color2 + Color3 + WaterColor1 + WaterColor2 + WaterColor3 + BiomeColor1 +
-                   BiomeColor2 + BiomeColor3 + DustColor1 + DustColor2 + DustColor3 + DustStrength1 + DustStrength2 +
-                   DustStrength3 +
-                   BiomeSound1 + BiomeSound2 + BiomeSound3 + LutContribution + ReflectionMap?.name + LutTexture?.name;
+            return "->" + Color1 + Color2 + Color3 + WaterColor1 + WaterColor2 + WaterColor3 + BiomeColor1 + BiomeColor2 + BiomeColor3 + DustColor1 + DustColor2 + DustColor3 + DustStrength1 + DustStrength2 + DustStrength3 + BiomeSound1 + BiomeSound2 + BiomeSound3 + LutContribution + ReflectionMap?.name + LutTexture?.name;
         }
     }
 }
